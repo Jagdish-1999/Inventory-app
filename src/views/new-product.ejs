@@ -1,0 +1,48 @@
+<h2 class="mt-5 mb-4">Add new product</h2>
+<% if (errorMessage) { %>
+<div role="alert" class="alert alert-danger"><%= errorMessage %></div>
+<% } %>
+
+<form action="/new" method="post">
+	<div class="mb-3">
+		<label for="product-name" class="form-label">Name</label>
+		<input
+			type="text"
+			autocomplete="on"
+			class="form-control"
+			id="product-name"
+			name="name"
+			placeholder="Type product name..." />
+	</div>
+	<div class="mb-3">
+		<label for="product-description" class="form-label"> Description </label>
+		<textarea
+			class="form-control"
+			autocomplete="on"
+			id="product-description"
+			name="description"
+			placeholder="Type product description..."
+			rows="3"></textarea>
+	</div>
+	<div class="mb-3">
+		<label for="product-Price" class="form-label">Price</label>
+		<input
+			type="number"
+			autocomplete="on"
+			class="form-control"
+			id="Price"
+			name="price"
+			placeholder="Type product Price..." />
+	</div>
+	<div class="mb-3">
+		<label for="product-image" class="form-label">Image URL</label>
+		<input
+			type="url"
+			class="form-control"
+			id="product-image"
+			autocomplete="on"
+			name="imageUrl"
+			placeholder="Type product Image URL..." />
+	</div>
+	<button class="btn btn-primary" type="submit">Add Product</button>
+</form>
