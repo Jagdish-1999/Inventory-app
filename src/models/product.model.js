@@ -11,8 +11,8 @@ export default class ProductModel {
         return products
     }
 
-    static add({ name, price, description, imageUrl }) {
-        return products.unshift(new ProductModel(`${products.length + 1}`, name, price, description, imageUrl));
+    static add({ name, price, description }, imageUrl) {
+        return products.unshift(new ProductModel(`${Date.now()}`, name, price, description, imageUrl));
     }
 
     static getById(id) {

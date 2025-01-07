@@ -3,7 +3,7 @@
 <div role="alert" class="alert alert-danger"><%= errorMessage %></div>
 <% } %>
 
-<form action="/new" method="post">
+<form action="/new" method="post" enctype="multipart/form-data">
 	<div class="mb-3">
 		<label for="product-name" class="form-label">Name</label>
 		<input
@@ -37,12 +37,19 @@
 	<div class="mb-3">
 		<label for="product-image" class="form-label">Image URL</label>
 		<input
+			type="file"
+			accept="image/*"
+			class="form-control"
+			id="product-image"
+			name="imageUrl"
+			placeholder="Type product Image URL..." />
+		<!-- <input
 			type="url"
 			class="form-control"
 			id="product-image"
 			autocomplete="on"
 			name="imageUrl"
-			placeholder="Type product Image URL..." />
+			placeholder="Type product Image URL..." /> -->
 	</div>
 	<button class="btn btn-primary" type="submit">Add Product</button>
 </form>

@@ -4,6 +4,7 @@ import ejsLayouts from 'express-ejs-layouts';
 
 import ProductsController from './src/controllers/product.controller.js';
 import validateFormDataMiddleware, { validateUsingLibrary } from './src/middlewares/validation.middleware.js';
+import uploadFilesMiddleware from './src/middlewares/file-uploads-middleware.js';
 
 const app = express();
 app.set("view engine", "ejs");
@@ -15,9 +16,9 @@ app.use(express.static("public"))
 const productController = new ProductsController();
 app.get('/', productController.getProducts);
 app.get('/new', productController.getAddProductForm);
-app.post('/new', validateUsingLibrary, productController.postAddNewProduct);
+app.post('/new', uploadFilesMiddleware, validateUsingLibrary, productController.postAddNewProduct);
 app.get('/update/:id', productController.getUpdateProductView);
-app.post('/update', productController.postUpdateProduct);
+app.post('/update', validateUsingLibrary, productController.postUpdateProduct);
 app.post("/delete/:id", productController.getDeleteProduct)
 
 const PORT = 3000;
