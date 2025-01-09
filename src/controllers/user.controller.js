@@ -9,7 +9,7 @@ export default class UserController {
     addUser(req, res) {
         const { name, email, password } = req.body;
         new UserModel(Date.now(), name, email, password);
-        return res.render("login")
+        return res.render("login", { errorMessage: null })
     }
 
     getLoginView(req, res) {
@@ -17,6 +17,7 @@ export default class UserController {
     }
 
     getUser(req, res) {
+        req.session.userEmail = req.body.email;
         const user = UserModel.getUser(req.body.email, req.body.password);
         if (user) {
             const products = ProductModel.getAll();
