@@ -13,4 +13,6 @@ export default class UserModel {
 }
 
 
-const users = []
+const users = [
+    { name: "john", email: "john@gmail.com", password: '1234' }
+]

@@ -21,9 +21,9 @@
 			<div class="container-md d-flex justify-content-start align-items-center">
 				<ul class="nav align-items-center">
 					<li class="nav-item">
-						<span class="nav-link text-success fs-5 fw-bolder" href="/"
-							>Inventory App</span
-						>
+						<span class="nav-link text-success fs-5 fw-bolder" href="/">
+							Inventory App
+						</span>
 					</li>
 					<li class="nav-item">
 						<a class="nav-link" aria-current="page" href="/">Products</a>
@@ -31,12 +31,18 @@
 					<li class="nav-item">
 						<a class="nav-link" href="/new">Add Product</a>
 					</li>
+					<% if (user) { %>
+					<li class="nav-item">
+						<a class="nav-link" href="/logout">Logout</a>
+					</li>
+					<% } else { %>
 					<li class="nav-item">
 						<a class="nav-link" href="/register">Register</a>
 					</li>
 					<li class="nav-item">
 						<a class="nav-link" href="/login">Login</a>
 					</li>
+					<% }%>
 				</ul>
 			</div>
 		</nav>

@@ -1,28 +1,40 @@
-import ProductModel from "../models/product.model.js";
+
 import UserModel from "../models/user.model.js";
+import render from "./common.controller.js";
 
 export default class UserController {
     getRegisterView(req, res) {
-        return res.render("register")
+        return render(req, res, "register")
     }
 
-    addUser(req, res) {
+    registerUser(req, res) {
         const { name, email, password } = req.body;
         new UserModel(Date.now(), name, email, password);
-        return res.render("login", { errorMessage: null })
+        return render(req, res, "login")
     }
 
     getLoginView(req, res) {
-        return res.render("login", { errorMessage: null })
+        return render(req, res, "login")
     }
 
-    getUser(req, res) {
-        req.session.userEmail = req.body.email;
-        const user = UserModel.getUser(req.body.email, req.body.password);
+    loginUser(req, res) {
+        const { email, password } = req.body
+        const user = UserModel.getUser(email, password);
         if (user) {
-            const products = ProductModel.getAll();
-            return res.render("products", { products })
+            req.session.user = email;
+            return res.redirect("/")
         }
-        return res.render("login", { errorMessage: "Invalid Credentials" })
+        return render(req, res, "login", { errorMessage: "Invalid Credentials" })
+    }
+
+    logout(req, res) {
+        res.clearCookie("lastVisit")
+        req.session.destroy((err) => {
+            if (err) {
+                res.status(500).send("Some thing went wrong! Please try again");
+            } else {
+                res.redirect("/login");
+            }
+        })
     }
 }

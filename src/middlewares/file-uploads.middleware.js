@@ -18,9 +18,8 @@ function uploadFilesMiddleware(req, res, next) {
         }
         if (req.file) {
             req.body.imageUrl = "images/" + req.file.filename;
-            next()
         }
+        next()
     });
-
 }
 export default uploadFilesMiddleware;

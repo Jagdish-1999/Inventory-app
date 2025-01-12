@@ -1,41 +1,22 @@
 import { body, validationResult } from "express-validator";
+import render from "../controllers/common.controller.js";
+import ProductModel from "../models/product.model.js";
 
-
-const validateFormDataMiddleware = (req, res, next) => {
-    // data validation
-    const { name, description, price, imageUrl } = req.body;
-    let errors = [];
-    if (!name || name.trim() == "") {
-        errors.push("Name is required");
-    }
-    if (!description || description.trim() == "") {
-        errors.push("Description is required");
-    }
-    if (!price || parseFloat(price) < 0) {
-        errors.push("Price is required and must be a positive number");
-    }
-    if (imageUrl) {
-        try {
-            const validUrl = new URL(imageUrl);
-        } catch (error) {
-            errors.push("Invalid image URL");
-
-        }
-    }
-
-    if (errors.length > 0) {
-        return res.render("new-product", { errorMessage: errors[0] });
-    }
-    next();
-}
-
-export const validateUsingLibrary = async (req, res, next) => {
+export const validateProductsInput = async (req, res, next) => {
     const rules = [
         body("name").notEmpty().withMessage("Name is required"),
         body("description").notEmpty().withMessage("Description is required"),
         body("price").isFloat({ gt: 0 }).withMessage("Price must be positive"),
-        // body("imageUrl").isURL().withMessage("Invalid image URL")
         body("imageUrl").custom((value, { req }) => {
+            if (req.url === "/update") {
+                try {
+                    const url = new URL(value);
+                    return !!url
+                } catch (error) {
+                    throw new Error("Image url is invalid")
+                }
+            }
+            // TODO add new product validation not working
             if (!req.file) {
                 throw new Error("Image is required!");
             }
@@ -46,12 +27,27 @@ export const validateUsingLibrary = async (req, res, next) => {
     await Promise.all(rules.map((rule) => rule.run(req)))
 
     const validationErrors = validationResult(req);
+    console.log(validationErrors.array()[0]);
+    if (!validationErrors.isEmpty()) {
+        const product = ProductModel.getById(req.body.id);
+        const currentPage = req.url === "/update" ? "update-product" : "new-product"
+        return render(req, res, currentPage, { product, errorMessage: validationErrors.array()[0].msg })
+    }
+    next();
+}
+export const validateRegisterForm = async (req, res, next) => {
+    const rules = [
+        body("name").notEmpty().withMessage("Name is required"),
+        body("email").notEmpty().withMessage("Email is required"),
+        body("password").notEmpty().withMessage("Password is required")
+    ]
+    await Promise.all(rules.map((rule) => rule.run(req)))
+    const validationErrors = validationResult(req);
 
     if (!validationErrors.isEmpty()) {
-        return res.render("new-product", { errorMessage: validationErrors.array()[0].msg })
+        return render(req, res, "register", { errorMessage: validationErrors.array()[0].msg })
     }
-    // res.render('new-product', { errorMessage: null })
     next();
 }
 
-export default validateFormDataMiddleware
+export default validateProductsInput

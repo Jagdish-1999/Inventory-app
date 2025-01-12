@@ -1,6 +1,5 @@
 /node_modules
 /.vscode
-/package-lock.json
 /nodemailer.js
 /user-events.js
 

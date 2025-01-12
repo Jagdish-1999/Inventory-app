@@ -1,35 +1,36 @@
 import ProductModel from '../models/product.model.js';
+import render from './common.controller.js';
 
 export default class ProductsController {
-    getProducts(_req, res) {
+    getProducts(req, res) {
         const products = ProductModel.getAll();
-        return res.render("products", { products });
+        return render(req, res, "products", { products });
     }
 
-    getAddProductForm(_req, res) {
-        return res.render("new-product", { errorMessage: null });
+    getAddProductForm(req, res) {
+        return render(req, res, "new-product");
     }
 
     postAddNewProduct(req, res) {
         const imageUrl = "images/" + req.file.filename;
         ProductModel.add(req.body, imageUrl);
-        const products = ProductModel.getAll();
-        return res.render("products", { products });
+        res.redirect("/")
     }
 
     getUpdateProductView(req, res) {
         const product = ProductModel.getById(req.params.id)
         if (product) {
-            res.render("update-product", { product, errorMessage: null })
+            render(req, res, "update-product", { product })
         } else {
             res.status(401).send("Product not found")
         }
     }
 
     postUpdateProduct(req, res) {
-        ProductModel.update(req.body);
-        const products = ProductModel.getAll();
-        return res.render("products", { products });
+        const product = ProductModel.update(req.body);
+        if (product) {
+            return res.redirect("/")
+        }
     }
 
     getDeleteProduct(req, res) {
@@ -39,7 +40,6 @@ export default class ProductsController {
             res.status(401).send("Product not found")
         }
         ProductModel.delete(id);
-        const products = ProductModel.getAll();
-        return res.render("products", { products });
+        return res.redirect("/")
     }
 }

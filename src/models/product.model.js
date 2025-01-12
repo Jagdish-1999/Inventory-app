@@ -1,10 +1,10 @@
 export default class ProductModel {
-    constructor(_id, _name, _price, _description, _imageUrl) {
-        this.id = _id;
-        this.name = _name;
-        this.price = _price;
-        this.description = _description;
-        this.imageUrl = _imageUrl
+    constructor(id, name, price, description, imageUrl) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.description = description;
+        this.imageUrl = imageUrl
     }
 
     static getAll() {
@@ -25,7 +25,8 @@ export default class ProductModel {
         product.description = description
         product.price = price
         product.imageUrl = imageUrl
-        return products.filter(p => p.id !== id).unshift(product);
+        products.filter(p => p.id !== id).unshift(product);
+        return product;
     }
 
     static delete(id) {
